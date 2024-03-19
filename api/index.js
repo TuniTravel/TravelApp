@@ -11,7 +11,8 @@ app.use(cors({
   credentials: true,
   origin: 'http://localhost:5177',
 }));
-mongoose.connect('process.env.MONGO_URL');
+
+mongoose.connect('mongodb+srv://Travel:sLvQvIZCTZYGFg4g@cluster0.uqeulul.mongodb.net/');
 app.get('/test', (req, res) => {
   res.json('test ok');
 
@@ -20,8 +21,12 @@ app.get('/test', (req, res) => {
 app.post('/register', async (req, res) => {
 
   const { name, email, password } = req.body;
-
-  res.json({ name, email, password });
+  const userDoc = await User.create({
+    name,
+    email,
+    password: bcrypt.hashSync(password, bcryptSalt),
+  })
+  res.json(userDoc);
 
 
 });
